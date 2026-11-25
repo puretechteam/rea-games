@@ -14,5 +14,9 @@ last callback.
 **Comparing JSON as text failed a correct Rust port.** `serde_json` sorts keys, JavaScript keeps insertion order, and every
 case "differed". Compare parsed values (`lib/compare.mjs`), never `JSON.stringify` output.
 
+**`in` found keys the port never printed.** `firstDiff` checked `k in a`, which is true for inherited names, so a port
+that printed a `constructor` key was reported as `.constructor: undefined != 1` instead of a missing key. Check own keys
+with `Object.hasOwn`; `test/compare.test.mjs` covers it.
+
 **A check that cannot fail looks like a pass.** After a port is green, break it three ways (a constant, a branch, an
 offset) and watch `verify` fail each time; otherwise the cases may not reach the code you think they do.

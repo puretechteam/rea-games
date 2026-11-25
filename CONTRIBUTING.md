@@ -17,6 +17,8 @@ A port is any program that reads a case on stdin and prints `{trace, tapeUsed}` 
 
 ## Rules
 
+- `npm test` runs the unit tests in `test/` (Node only, a few seconds); run it after changing anything in `lib/`.
+  `npm run verify` replays every case through every port.
 - Never edit a recording by hand, and never loosen a comparison to get green.
 - Report numbers as `verify` printed them, including what is not covered.
 - Add a mistake worth not repeating to `docs/pitfalls.md` in the same change.

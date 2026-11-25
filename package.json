@@ -46,6 +46,6 @@
   },
   "scripts": {
     "verify": "node bin/rea-games.mjs verify all",
-    "test": "node bin/rea-games.mjs verify all"
+    "test": "node --test \"test/**/*.test.mjs\""
   }
 }
