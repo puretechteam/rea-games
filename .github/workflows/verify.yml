@@ -15,6 +15,6 @@ jobs:
         run: |
           V=4.4.1-stable; B=https://github.com/godotengine/godot/releases/download/$V
           curl -sL -o godot.zip $B/Godot_v${V}_linux.x86_64.zip; curl -sL -o SUMS $B/SHA512-SUMS.txt
-          grep " Godot_v${V}_linux.x86_64.zip" SUMS | sed 's/ Godot.*/  godot.zip/' | sha512sum -c -
+          grep " Godot_v${V}_linux.x86_64.zip" SUMS | sed 's/Godot_v.*/godot.zip/' | sha512sum -c -
           unzip -q godot.zip; echo "REA_GODOT=$PWD/Godot_v${V}_linux.x86_64" >> $GITHUB_ENV
       - run: node bin/rea-games.mjs verify all

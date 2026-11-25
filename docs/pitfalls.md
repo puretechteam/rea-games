@@ -21,6 +21,10 @@ with `Object.hasOwn`; `test/compare.test.mjs` covers it.
 **One failing build hid every other result.** The exception from a port's build ended `verify all`, so on a machine
 without cargo nothing after `2048 / bevy` was checked and there was no summary. A port that cannot run is that port's
 failure (`verifyGames` in `lib/verify.mjs`); the run goes on and ends with one line per port.
+**CI never reached `verify all`.** The Godot checksum line turned `<hash>  Godot_v...zip` into `<hash>   godot.zip`
+(three spaces), so `sha512sum -c` looked for a file named ` godot.zip` and every run failed before any port was replayed.
+Replace only the file name in the sums line, and look at a new workflow's log for the `verify` output, not just its
+colour.
 
 **A check that cannot fail looks like a pass.** After a port is green, break it three ways (a constant, a branch, an
 offset) and watch `verify` fail each time; otherwise the cases may not reach the code you think they do.
