@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { listGames, loadGame, verifyPort, packCases } from "../lib/verify.mjs";
+import { listGames, loadGame, verifyGames, summaryLines, packCases } from "../lib/verify.mjs";
 import { scaffold } from "../lib/scaffold.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -51,17 +51,9 @@ async function main() {
   if (cmd === "verify") {
     const portOpt = flag("--port");
     const names = rest[0] === "all" || !rest[0] ? listGames(root) : [rest[0]];
-    let bad = 0;
-    for (const g of names) {
-      const { meta } = loadGame(root, g);
-      for (const p of portOpt && portOpt !== true ? [portOpt] : Object.keys(meta.ports)) {
-        console.log(`${g} / ${p}`);
-        const r = verifyPort(root, g, p);
-        console.log(`  => ${r.passed}/${r.cases} cases identical, ${r.inputs} inputs, ${r.frames} recorded states`);
-        bad += r.failures.length;
-      }
-    }
-    process.exit(bad ? 1 : 0);
+    const results = verifyGames(root, names, portOpt && portOpt !== true ? portOpt : null);
+    if (results.length > 1) console.log(["", "summary", ...summaryLines(results).map((l) => "  " + l)].join("\n"));
+    process.exit(results.some((r) => r.error || r.failures.length) ? 1 : 0);
   }
   console.error(help);
   process.exit(2);
