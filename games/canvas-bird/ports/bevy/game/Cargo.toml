@@ -6,4 +6,4 @@ license = "MIT"
 
 [dependencies]
 bird-core = { path = "../core" }
-bevy = { version = "0.19", default-features = false, features = ["2d"] }
+bevy = { version = "0.20", default-features = false, features = ["2d"] }
