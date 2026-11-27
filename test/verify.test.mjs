@@ -113,6 +113,19 @@ test("a game with no recorded cases fails and says to record", () => {
   }
 });
 
+test("a game with no cases folder fails and says to record, like an empty one", () => {
+  const root = makeRoot({ a: { web: {} } });
+  fs.rmSync(path.join(root, "games", "a", "cases"), { recursive: true });
+  try {
+    const lines = [];
+    const results = verifyGames(root, ["a"], null, (l) => lines.push(l));
+    assert.ok(lines.includes("  FAIL no recorded cases in games/a/cases; run: rea-games record a"), lines.join("\n"));
+    assert.deepEqual(summaryLines(results), ["a / web  => FAIL no recorded cases in games/a/cases; run: rea-games record a"]);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("a missing port command is named once, not once per case", () => {
   const missing = { cmd: ["rea-games-no-such-command"] };
   const root = makeRoot({ a: { missing } });
